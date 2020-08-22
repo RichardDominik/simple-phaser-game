@@ -183,7 +183,7 @@ function collectStar(player, star) {
         var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 720 * 3);
 
         if (numberOfBombs < 5) {
-            var bomb = bombs.create(x, 16, 'bomb').setScale(2);
+            var bomb = bombs.create(x, 16, 'bomb').setScale(1.5);
             bomb.setBounce(1);
             bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
