@@ -20,8 +20,8 @@ var config = {
 var score = 0;
 var scoreText;
 var numberOfBombs = 0;
-
 var game = new Phaser.Game(config);
+var music;
 
 function preload() {
     this.load.image('sky', 'assets/bg001.png');
@@ -32,18 +32,24 @@ function preload() {
     this.load.image('bomb', 'assets/bomb.png');
     this.load.image('tree', 'assets/tree.png');
     this.load.image('wall', 'assets/wall.png');
+    this.load.audio('music', ['assets/randomsillychipsong.ogg']);
+    this.load.audio('over', ['assets/gameover3-ogg.ogg']);
     this.load.spritesheet('sprite',
         'assets/sprite.png',
         { frameWidth: 16, frameHeight: 16 }
     );
 
-    this.physics.world.bounds.width = 720 * 4;
+    this.physics.world.bounds.width = 720 * 3;
     this.physics.world.bounds.height = 800;
 }
 
 function create() {
+    music = this.sound.add('music');
+    music.loop = true;
+    music.play();
 
-    this.cameras.main.setBounds(0, 0, 720 * 4, 176);
+
+    this.cameras.main.setBounds(0, 0, 720 * 3, 176);
 
     var sky = this.add.image(400, 300, 'sky');
     sky.setScrollFactor(0)
@@ -53,7 +59,7 @@ function create() {
     stars = this.physics.add.group({
         key: 'star',
         repeat: 18,
-        setXY: { x: 18, y: 0, stepX: 150 }
+        setXY: { x: 18, y: 0, stepX: 130 }
     });
 
     stars.children.iterate(function (child) {
@@ -76,6 +82,11 @@ function create() {
     platforms.create(1050, 100, 'jump');
     platforms.create(1120, 280, 'jump');
     platforms.create(1350, 280, 'jump');
+    platforms.create(1500, 390, 'jump');
+    platforms.create(1720, 320, 'jump');
+    platforms.create(1950, 500, 'jump');
+    platforms.create(2040, 200, 'jump');
+
 
     trees.create(650, 550, 'tree');
     trees.create(60, 550, 'tree');
@@ -169,7 +180,7 @@ function collectStar(player, star) {
     scoreText.setText('Score: ' + score);
 
     setInterval(function () {
-        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 720 * 4);
+        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 720 * 3);
 
         if (numberOfBombs < 5) {
             var bomb = bombs.create(x, 16, 'bomb').setScale(2);
@@ -198,4 +209,7 @@ function hitBomb(player, bomb) {
     player.setTint(0xff0000);
     player.anims.play('turn');
     gameOver = true;
+    music.pause();
+    var gameOverSound = this.sound.add('over');
+    gameOverSound.play();
 }
