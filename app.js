@@ -55,6 +55,7 @@ function create() {
     sky.setScrollFactor(0)
 
     scoreText = this.add.text(320, 16, 'Score: 0 ', { fontSize: '32px', fill: '#000', align: 'center' });
+    scoreText.setScrollFactor(0)
 
     stars = this.physics.add.group({
         key: 'star',
@@ -170,7 +171,7 @@ function update() {
         player.setVelocityY(-480);
     }
 
-    scoreText.x = player.body.position.x - 80;
+    scoreText.fixedToCamera = true;
 }
 
 function collectStar(player, star) {
@@ -189,7 +190,7 @@ function collectStar(player, star) {
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
             numberOfBombs++;
         }
-    }, 5000);
+    }, 10000);
 
     if (stars.countActive(true) === 0) {
         stars.children.iterate(function (child) {
